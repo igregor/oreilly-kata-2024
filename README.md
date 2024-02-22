@@ -18,10 +18,7 @@ O'REILLY Architectural Kata 2024
 
 ## Sequence Diagrams
 
-- [Device for the patient setup](./sequence-diagrams/png/device-for-the-patient-setup.png)
-- [Monitoring device operation](./sequence-diagrams/png/monitoring-device-operation.png)
-- [Viewing Vital Signs](./sequence-diagrams/png/viewing-vital-signs.png)
-- [Sending push notifications](./sequence-diagrams/png/sending-push-notifications.png)
+Please find the Sequence Diagrams [here](./sequence-diagrams/sequence-diagrams.md)
 
 ## Architectural Decision Records (ADRs)
 

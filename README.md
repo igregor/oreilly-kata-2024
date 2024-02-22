@@ -9,7 +9,6 @@ O'REILLY Architectural Kata 2024
 - Reuven Farchi
 - Grzegorz Greg Wojtanowicz
 - Łukasz Woziński
-- Marcin Zarębski
 
 ## Architecture
 

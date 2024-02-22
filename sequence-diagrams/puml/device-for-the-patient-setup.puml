@@ -1,0 +1,35 @@
+@startuml
+
+skinparam actorStyle Hollow
+
+actor "Nurse Station Web App" as Nurse
+control  Security  as Security
+control  "External System"  as ExternalSystem
+control  "Monitoring Device Manager"  as MonitoringDeviceManager
+control  "Monitor Configuration"  as MonitorConfiguration
+control  "Supervisor"  as Supervisor
+actor "Vital Signs Monitor" as Monitor
+
+Nurse -> Security: Logs in
+Security -> ExternalSystem: Logs the user in
+ExternalSystem --> Security: JWT
+Security --> Nurse: JWT
+Nurse -> MonitoringDeviceManager: Registers assignment [device <--> patient]
+MonitoringDeviceManager ->> Supervisor: Notify
+MonitoringDeviceManager --> Nurse: OK
+group if no Vital Signs Monitor for the Patient
+Supervisor ->> Monitor: Start
+Monitor -> MonitorConfiguration: Reads configuration
+MonitorConfiguration --> Monitor:
+end
+
+Nurse -> MonitorConfiguration: Configures the monitor
+MonitorConfiguration ->> Supervisor: Notify
+
+MonitorConfiguration --> Nurse: OK
+Supervisor ->> Monitor: Update
+Monitor -> MonitorConfiguration: Reads configuration
+MonitorConfiguration --> Monitor:
+
+@enduml
+

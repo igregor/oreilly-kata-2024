@@ -1,0 +1,36 @@
+@startuml
+
+skinparam actorStyle Hollow
+
+actor "Nurse Station \nWeb App" as Nurse
+actor "StayHealthy \nMobile App" as StayHealthy
+
+control  "Orchestration" as Orchestration
+control  "Integration Api" as IntegrationApi
+queue  "Queue" as Queue
+control  "Failure Monitor" as FailureLiveMonitor
+control  "Vital Signs Monitor" as VitalSignsMonitor
+control  "Notifications" as Notifications
+
+loop
+Queue ->> FailureLiveMonitor: Receive events
+note over FailureLiveMonitor: Analysis of \nthe monitoring device \ntelemetry
+Queue ->> VitalSignsMonitor: Receive events
+note over VitalSignsMonitor: Analysis of \nthe vital signs
+
+
+group if issue detected
+FailureLiveMonitor -> Notifications: Alerts about issues
+VitalSignsMonitor -> Notifications: Alerts about issues
+
+
+Notifications -> Orchestration : Reads assignments [device <--> patient]
+Orchestration --> Notifications :
+Notifications -> IntegrationApi : Reads assignments [medical staff <--> patient]
+IntegrationApi --> Notifications :
+Notifications -> StayHealthy: Sends push alerts according to assignments
+Notifications -> Nurse: Sends push alerts according to assignments
+end
+end
+@enduml
+

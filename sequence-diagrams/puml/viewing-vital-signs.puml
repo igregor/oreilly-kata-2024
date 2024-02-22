@@ -1,0 +1,24 @@
+@startuml
+
+skinparam actorStyle Hollow
+
+actor "Nurse Station \nor History \nWeb App" as HistoryWebApp
+note over HistoryWebApp: Same flow for both \napps - happens \ncontinuously \nor on demand
+
+control "Security" as Security
+control  "Orchestration" as Orchestration
+control  "Integration Api" as IntegrationApi
+database  "Time Series DB" as TimeSeriesDB
+
+
+HistoryWebApp -> Security: Requests vital signs data
+Security -> IntegrationApi : Reads assignments \n[medical staff <--> patient]
+IntegrationApi --> Security:
+Security -> Orchestration : Reads assignments \n[device <--> patient]
+Orchestration --> Security:
+Security -> TimeSeriesDB : Reads data limited by assignments
+TimeSeriesDB --> Security:
+Security --> HistoryWebApp: Returns filtered \nvital signs
+
+@enduml
+

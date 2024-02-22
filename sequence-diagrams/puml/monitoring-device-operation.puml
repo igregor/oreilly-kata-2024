@@ -1,0 +1,27 @@
+@startuml
+
+skinparam actorStyle Hollow
+
+actor "Monitoring \nDevice" as MonitoringDevice
+boundary  "Monitoring Device \nGateway" as MonitoringDeviceGateway
+control  "Orchestration" as Orchestration
+queue  "Queue" as Queue
+database  "Storage Consumer" as StorageConsumer
+database  "Time Series DB" as TimeSeriesDB
+control  "Live Monitoring" as LiveMonitoring
+
+loop
+MonitoringDevice ->> MonitoringDeviceGateway : Sends vital signs and telemetry
+MonitoringDeviceGateway -> Orchestration : Reads assignments [device <--> patient]
+Orchestration --> MonitoringDeviceGateway :
+MonitoringDeviceGateway ->> Queue : Sends vital signs enriched \nwith patients' assignments and telemetry
+par
+Queue -> StorageConsumer: Receive events
+StorageConsumer -> TimeSeriesDB: Saves events
+TimeSeriesDB --> StorageConsumer: OK
+else
+Queue -> LiveMonitoring: Receive events
+end
+end
+@enduml
+
